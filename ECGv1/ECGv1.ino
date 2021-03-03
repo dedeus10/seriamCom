@@ -8,12 +8,10 @@
                          //resolution. http://www.arduino.cc/playground/Main/FlexiTimer2
 
 // CONSTANTS -----------------------------------------------------------------------------
-#define SAMPFREQ 200              // ADC sampling rate. CHANGE SAMPLE FREQ HERE
+#define SAMPFREQ 90              // ADC sampling rate. CHANGE SAMPLE FREQ HERE
 #define TIMER2VAL (1024/SAMPFREQ) // Set ADC sample rate frequency
 #define TXSPEED 57600             // Serial communication speed. USE 57600
 // ---
-#define LED 13 // Arduino Led L
-#define CAL_SIG 9
 
 // GLOBAL VARIABLES ----------------------------------------------------------------------
 volatile unsigned int ADC_Value = 0;     // ADC current value
@@ -23,9 +21,7 @@ volatile unsigned int ADC_Value = 0;     // ADC current value
 // This is used to read values and send data over serial communication
 void timerTwoOverflowISR(){
     //Read data from the serial
-    ADC_Value = analogRead(A0);
-    //Write again to de serial
-    Serial.write(ADC_Value);
+    Serial.println(analogRead(A0));
 }
 
 // ARDUINO SETUP and LOOP ----------------------------------------------------------------
@@ -40,7 +36,7 @@ void setup(){
   // Set Timer2, that is used to setup the analag channels sampling frequency
   //and packet update. Whenever interrupt occures, the current read packet is
   //sent over serial communication.
-  FlexiTimer2::set(TIMER2VAL, timerTwoOverflowISR);
+  FlexiTimer2::set(10, timerTwoOverflowISR);
   FlexiTimer2::start();
 
   // Starts the communication with the previously defined speed
